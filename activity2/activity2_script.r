@@ -56,6 +56,15 @@ str(datW)
 datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
 #google date formatting in r to find more options and learn more
 
+#question 2
+characters<- c("pig","horse","cow","chicken");
+factors<-c(0,1,1,2,5,1,3);
+factors<-as.factor(factors);
+numerical<-c(2,5,8,2,3,1,9);
+integer<-c(3,6,8,6,4)
+integer<-as.integer(integer)
+
+
 #find out all unique site names
 levels(datW$NAME)
 
@@ -103,6 +112,17 @@ hist(datW$TAVE[datW$siteN == 1],
      col="grey50",
      border="white")
 
+
+#question 3
+#what are the arguments in the histogram above??
+#we are ignoring NAs, going by list of the names, function is the mean and the na.rm is true
+#freq=false is that the histogram goes by probability densities
+#xlab and ylab are the axis labels
+#main is histogram label and border of boxes are white and color is grey
+
+
+
+
 #make a histogram for the first site in our levels, Aberdeen
 #main= is the title name argument.
 #Here you want to paste the actual name of the factor not the numeric index
@@ -131,6 +151,37 @@ abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN
        col = "tomato3", 
        lty = 3,
        lwd = 3)
+
+#question 4
+datW
+hist(datW$TAVE[datW$siteN == 1],
+     freq=FALSE, 
+     main = paste(levels(datW$NAME)[1]),
+     xlab = "Average daily temperature (degrees C)", 
+     ylab="Relative frequency",
+     col="grey50",
+     border="white")
+#add mean line with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "tomato3",
+       lwd = 3)
+#add standard deviation line below the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+#add standard deviation line above the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+
+
+
+
 
 #make a histogram for the first site in our levels
 #main= is the title name argument.
