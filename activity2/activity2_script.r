@@ -343,14 +343,34 @@ qnorm(0.95,
 
 
 
+######question 6
 
+#adding 4 degrees to mean temperature 
+pnorm(0,
+      mean(datW$TAVE[datW$siteN == 1]+4,na.rm=TRUE),
+      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
 
-
-
-
+#######question 7
+#histogram with precipitation
+h1 <- hist(datW$PRCP[datW$siteN == 1],
+           freq=FALSE, 
+           main = paste(levels(datW$NAME)[1]),
+           xlab = "Average daily precipitation", 
+           xlim=c(0,80),
+           ylab="Relative frequency",
+           col="grey50",
+           border="white")
 
 
 
 ###########question 8
+#add column showing year only 
+year<-as.numeric(datW$DATE,"%Y")
+year
+cbind(datW,year)
+#want to aggregate data 
+aggregate(datW, by= datW$DATE, FUN=mean,subset(datW$DATE))
+sum(datW$PRCP[datW$siteN == 1],na.rm = TRUE)
 
-
+######question 9
+#need to get mean temperatures and precipitaios from before
