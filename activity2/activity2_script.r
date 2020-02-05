@@ -46,7 +46,7 @@ datW <- read.csv("y:\\Students\\jvjohns\\a02\\2011124.csv")
 
 #get more information about the dataframe
 str(datW)
-
+#########question 1 
 #two types of data: numeric and factors (assigned to repeating character strings)
 
 #specify a column with a proper date format
@@ -56,11 +56,18 @@ str(datW)
 datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
 #google date formatting in r to find more options and learn more
 
-#question 2
-characters<- c("pig","horse","cow","chicken");
-factors<-c(0,1,1,2,5,1,3);
+
+
+
+
+
+
+
+##########question 2
+characters<- c("pig","horse","cow","chicken","donkey");
+factors<-c(0,1,2,3,4);
 factors<-as.factor(factors);
-numerical<-c(2,5,8,2,3,1,9);
+numerical<-c(2,5,8,3,1);
 integer<-c(3,6,8,6,4)
 integer<-as.integer(integer)
 
@@ -113,7 +120,7 @@ hist(datW$TAVE[datW$siteN == 1],
      border="white")
 
 
-#question 3
+###############question 3
 #what are the arguments in the histogram above??
 #we are ignoring NAs, going by list of the names, function is the mean and the na.rm is true
 #freq=false is that the histogram goes by probability densities
@@ -152,32 +159,119 @@ abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN
        lty = 3,
        lwd = 3)
 
-#question 4
-datW
-hist(datW$TAVE[datW$siteN == 1],
+
+
+
+
+
+
+###########question 4
+
+#site 2
+hist(datW$TAVE[datW$siteN == 2],
      freq=FALSE, 
-     main = paste(levels(datW$NAME)[1]),
+     main = paste(levels(datW$NAME)[2]),
      xlab = "Average daily temperature (degrees C)", 
      ylab="Relative frequency",
-     col="grey50",
+     col="blue",
      border="white")
 #add mean line with red (tomato3) color
 #and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
        col = "tomato3",
        lwd = 3)
 #add standard deviation line below the mean with red (tomato3) color
 #and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
        col = "tomato3", 
        lty = 3,
        lwd = 3)
 #add standard deviation line above the mean with red (tomato3) color
 #and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
        col = "tomato3", 
        lty = 3,
        lwd = 3)
+
+#site 3
+hist(datW$TAVE[datW$siteN == 3],
+     freq=FALSE, 
+     main = paste(levels(datW$NAME)[3]),
+     xlab = "Average daily temperature (degrees C)", 
+     ylab="Relative frequency",
+     col="light blue",
+     border="white")
+#add mean line with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
+       col = "tomato3",
+       lwd = 3)
+#add standard deviation line below the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+#add standard deviation line above the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+#site 4
+hist(datW$TAVE[datW$siteN == 4],
+     freq=FALSE, 
+     main = paste(levels(datW$NAME)[4]),
+     xlab = "Average daily temperature (degrees C)", 
+     ylab="Relative frequency",
+     col="yellow",
+     border="white")
+#add mean line with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
+       col = "tomato3",
+       lwd = 3)
+#add standard deviation line below the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+#add standard deviation line above the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+#site 5
+hist(datW$TAVE[datW$siteN == 5],
+     freq=FALSE, 
+     main = paste(levels(datW$NAME)[5]),
+     xlab = "Average daily temperature (degrees C)", 
+     ylab="Relative frequency",
+     col="orange",
+     border="white")
+#add mean line with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 5],na.rm=TRUE), 
+       col = "tomato3",
+       lwd = 3)
+#add standard deviation line below the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 5],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 5],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+
+#add standard deviation line above the mean with red (tomato3) color
+#and thickness of 3
+abline(v = mean(datW$TAVE[datW$siteN == 5],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 5],na.rm=TRUE), 
+       col = "tomato3", 
+       lty = 3,
+       lwd = 3)
+
+
+
 
 
 
@@ -247,5 +341,16 @@ qnorm(0.95,
       mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
       sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
 
+
+
+
+
+
+
+
+
+
+
+###########question 8
 
 
