@@ -58,11 +58,6 @@ datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
 
 
 
-
-
-
-
-
 ##########question 2
 characters<- c("pig","horse","cow","chicken","donkey");
 factors<-c(0,1,2,3,4);
@@ -346,7 +341,9 @@ qnorm(0.95,
 ######question 6
 
 #adding 4 degrees to mean temperature 
-pnorm(0,
+pnorm(qnorm(0.95,
+            mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
+            sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE)),
       mean(datW$TAVE[datW$siteN == 1]+4,na.rm=TRUE),
       sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
 
@@ -364,13 +361,44 @@ h1 <- hist(datW$PRCP[datW$siteN == 1],
 
 
 ###########question 8
-#add column showing year only 
-year<-as.numeric(datW$DATE,"%Y")
-year
-cbind(datW,year)
 #want to aggregate data 
-aggregate(datW, by= datW$DATE, FUN=mean,subset(datW$DATE))
-sum(datW$PRCP[datW$siteN == 1],na.rm = TRUE)
+#added column of just year into the data so we can aggregate by year, not just date
+year<- substring(datW$DATE,1,4)
+datYEAR<-cbind(datW,year)
+
+agg_data<- aggregate(datYEAR$PRCP, by= list(datYEAR$year,datW$siteN), FUN='mean',na.rm=TRUE)
+#agg_data has three columns
+#group.1 is year, group.2 is site number, and x is average rainfall in the year
+colnames(agg_data)<-c("year","site","avg_rainfall")
+agg_data
+sum(agg_data$avg_rainfall[agg_data$site])
+
+#this histogram is showing the average annual precipitation of only site 1 and the frequency of the average annual precipitaion
+#the data points for site 1 are by year already
+sum_ogram <- hist(agg_data$avg_rainfall[agg_data$site==1],
+           freq=FALSE, 
+           main = "ABERDEEN, WA US",
+           xlab = "Average annual precipitation (mm)", 
+           xlim=c(0,10),
+           ylab="Relative frequency",
+           col="light blue",
+           border="white")
+#xlim was done just by what I saw, how would I do this so it automatically fit the data?
+
+
 
 ######question 9
-#need to get mean temperatures and precipitaios from before
+
+#mean of annual precipitation for all sites individually
+avg_rain_site<-aggregate(agg_data$avg_rainfall,by=list(agg_data$site),FUN="mean")
+colnames(avg_rain_site)<-c("site","avg_rainfall")
+avg_rain_site
+
+#mean of annual precipitation for all years individually
+
+avg_rain_year<-aggregate(agg_data$avg_rainfall,by=list(agg_data$year),FUN="mean")
+colnames(avg_rain_year)<-c("site","avg_rainfall")
+avg_rain_year
+
+
+
