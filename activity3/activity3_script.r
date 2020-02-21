@@ -151,7 +151,7 @@ assert <- function(statement,err.message){
 
 
 assert(length(lightscale) == nrow(datW),"not the same length")
-
+#the lengths should be the same to make sure it worked
 
 
 
@@ -190,6 +190,7 @@ plot(datW$doy, datW$wind.speedQ2, xlab = "Day of Year", ylab = "Wind Speed",
 #how to test if points are different graphically than other variables
 #find out which data have NAs in sil moisture and soil temperature
 
+#finds which values are true and false
   is.na(datW$soil.moisture)
     
 plot(datW$doy, datW$soil.temp, xlab = "Day of Year", ylab = "Soil Temp",
@@ -209,13 +210,15 @@ plot(datW$doy, datW$soil.moisture, xlab = "Day of Year", ylab = "Soil Temperatur
 
 meanairtemp<- round(mean(datW$air.temperature, na.rm=TRUE), digits=1)
 meanwindspeed<- round(mean(datW$wind.speed, na.rm=TRUE),digits=1)
-meansoilmoisture<- round(mean(datW$soil.moisture, na.rm=TRUE),digits=1)
+meansoilmoisture<- round(mean(datW$soil.moisture, na.rm=TRUE),digits=3)
 meansoiltemp<- round(mean(datW$soil.temp, na.rm=TRUE),digits=1)
-totalprecip<- round(sum(datW$precipitation, na.rm=TRUE),digits=1)
+totalprecip<- round(sum(datW$precipitation, na.rm=TRUE),digits=3)
 
 means<- c(meanairtemp,meanwindspeed,meansoilmoisture,meansoiltemp, totalprecip)
 
-data.frame(means)
+dfmeans<- data.frame(means)
+rownames(dfmeans)<-c("meanairtemp","meanwindspeed","meansoilmoisture","meansoiltemp", "totalprecip")
+dfmeans
 
 #time frame is june 12 to july 26
 #2118 observations
