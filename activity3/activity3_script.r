@@ -119,6 +119,24 @@ datW[datW$air.tempQ1 > 33,]
 
 
 
+#plot precipitation and lightning strikes on the same plot
+#normalize lighting strikes to match precipitation
+lightscale <- (max(datW$precipitation)/max(datW$lightning.acvitivy)) * datW$lightning.acvitivy
+#make the plot with precipitation and lightning activity marked
+#make it empty to start and add in features
+plot(datW$DD , datW$precipitation, xlab = "Day of Year", ylab = "Precipitation & lightning",
+     type="n")
+#plot precipitation points only when there is precipitation 
+#make the points semi-transparent
+points(datW$DD[datW$precipitation > 0], datW$precipitation[datW$precipitation > 0],
+       col= rgb(95/255,158/255,160/255,.5), pch=15)        
+
+#plot lightning points only when there is lightning     
+points(datW$DD[lightscale > 0], lightscale[lightscale > 0],
+       col= "tomato3", pch=19)
+
+
+
 
 
 #Question 5:
@@ -132,13 +150,88 @@ assert <- function(statement,err.message){
 }
 
 
-assert(length() == nrow(datW),"not the same length")
-
+assert(length(lightscale) == nrow(datW),"not the same length")
 
 
 
 
 
 #Question 6:
+#filter out storms in wind and air temperature measurements
+# filter all values with lightning that coincides with rainfall greater than 2mm or only rainfall over 5 mm.    
+#create a new air temp column
+datW$air.tempQ2 <- ifelse(datW$precipitation  >= 2 & datW$lightning.acvitivy >0, NA,
+                          ifelse(datW$precipitation > 5, NA, datW$air.tempQ1))
 
+
+
+datW$wind.speedQ2 <- ifelse(datW$precipitation  >= 2 & datW$lightning.acvitivy >0, NA,
+                          ifelse(datW$precipitation > 5, NA, datW$wind.speed))
+#data should be filtered
+#making a new column with the unreliable wind speeds 
+#removing the unreliable wind speeds when it says there is a storm
+
+assert(sum(is.na(datW$air.tempQ2))==sum(is.na(datW$wind.speed)),"not the same number of NAs")
+
+#the number of NAs is the same for the air.tempQ2 and wind.speed
+
+plot(datW$doy, datW$wind.speedQ2, xlab = "Day of Year", ylab = "Wind Speed",
+     type="b")
+
+#type b means there are lines and points on it
+
+
+
+
+
+#Question 7:
+
+
+#how to test if points are different graphically than other variables
+#find out which data have NAs in sil moisture and soil temperature
+
+  is.na(datW$soil.moisture)
+    
+plot(datW$doy, datW$soil.temp, xlab = "Day of Year", ylab = "Soil Temp",
+      type="b")
+
+plot(datW$doy, datW$soil.moisture, xlab = "Day of Year", ylab = "Soil Temperature",
+     type="b")
+
+  
+
+  
+  
+  
+#Question 8:
+
+#how many observations went into the calculations and the time period of the measurements
+
+meanairtemp<- round(mean(datW$air.temperature, na.rm=TRUE), digits=1)
+meanwindspeed<- round(mean(datW$wind.speed, na.rm=TRUE),digits=1)
+meansoilmoisture<- round(mean(datW$soil.moisture, na.rm=TRUE),digits=1)
+meansoiltemp<- round(mean(datW$soil.temp, na.rm=TRUE),digits=1)
+totalprecip<- round(sum(datW$precipitation, na.rm=TRUE),digits=1)
+
+means<- c(meanairtemp,meanwindspeed,meansoilmoisture,meansoiltemp, totalprecip)
+
+data.frame(means)
+
+#time frame is june 12 to july 26
+#2118 observations
+
+
+
+
+#Question 9:
+
+par(mfrow=c(2,2))
+plot(datW$doy, datW$soil.moisture, xlab = "Day of Year", ylab = "Soil Moisture",
+     type="b",col="brown")
+plot(datW$doy, datW$air.temperature, xlab = "Day of Year", ylab = "Air Temp",
+     type="b", col="light blue")
+plot(datW$doy, datW$soil.temp, xlab = "Day of Year", ylab = "Soil Temp",
+     type="b", col="orange")
+plot(datW$doy, datW$precipitation, xlab = "Day of Year", ylab = "Precipitation",
+     type="b", col="blue")
 
