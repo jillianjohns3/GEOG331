@@ -1,4 +1,6 @@
 #Activity 2
+#from my own computer!
+
 
 #make a vector of tree heights in meters
 heights <- c(30,41,20,22)
@@ -46,7 +48,7 @@ datW <- read.csv("y:\\Students\\jvjohns\\a02\\2011124.csv")
 
 #get more information about the dataframe
 str(datW)
-#########question 1 
+
 #two types of data: numeric and factors (assigned to repeating character strings)
 
 #specify a column with a proper date format
@@ -56,13 +58,11 @@ str(datW)
 datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
 #google date formatting in r to find more options and learn more
 
-
-
-##########question 2
-characters<- c("pig","horse","cow","chicken","donkey");
-factors<-c(0,1,2,3,4);
+#question 2
+characters<- c("pig","horse","cow","chicken");
+factors<-c(0,1,1,2,5,1,3);
 factors<-as.factor(factors);
-numerical<-c(2,5,8,3,1);
+numerical<-c(2,5,8,2,3,1,9);
 integer<-c(3,6,8,6,4)
 integer<-as.integer(integer)
 
@@ -115,7 +115,7 @@ hist(datW$TAVE[datW$siteN == 1],
      border="white")
 
 
-###############question 3
+#question 3
 #what are the arguments in the histogram above??
 #we are ignoring NAs, going by list of the names, function is the mean and the na.rm is true
 #freq=false is that the histogram goes by probability densities
@@ -154,119 +154,32 @@ abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN
        lty = 3,
        lwd = 3)
 
-
-
-
-
-
-
-###########question 4
-
-#site 2
-hist(datW$TAVE[datW$siteN == 2],
+#question 4
+datW
+hist(datW$TAVE[datW$siteN == 1],
      freq=FALSE, 
-     main = paste(levels(datW$NAME)[2]),
+     main = paste(levels(datW$NAME)[1]),
      xlab = "Average daily temperature (degrees C)", 
      ylab="Relative frequency",
-     col="blue",
+     col="grey50",
      border="white")
 #add mean line with red (tomato3) color
 #and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
        col = "tomato3",
        lwd = 3)
 #add standard deviation line below the mean with red (tomato3) color
 #and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
        col = "tomato3", 
        lty = 3,
        lwd = 3)
 #add standard deviation line above the mean with red (tomato3) color
 #and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 2],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 2],na.rm=TRUE), 
+abline(v = mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE), 
        col = "tomato3", 
        lty = 3,
        lwd = 3)
-
-#site 3
-hist(datW$TAVE[datW$siteN == 3],
-     freq=FALSE, 
-     main = paste(levels(datW$NAME)[3]),
-     xlab = "Average daily temperature (degrees C)", 
-     ylab="Relative frequency",
-     col="light blue",
-     border="white")
-#add mean line with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
-       col = "tomato3",
-       lwd = 3)
-#add standard deviation line below the mean with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
-       col = "tomato3", 
-       lty = 3,
-       lwd = 3)
-#add standard deviation line above the mean with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 3],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 3],na.rm=TRUE), 
-       col = "tomato3", 
-       lty = 3,
-       lwd = 3)
-#site 4
-hist(datW$TAVE[datW$siteN == 4],
-     freq=FALSE, 
-     main = paste(levels(datW$NAME)[4]),
-     xlab = "Average daily temperature (degrees C)", 
-     ylab="Relative frequency",
-     col="yellow",
-     border="white")
-#add mean line with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
-       col = "tomato3",
-       lwd = 3)
-#add standard deviation line below the mean with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
-       col = "tomato3", 
-       lty = 3,
-       lwd = 3)
-#add standard deviation line above the mean with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 4],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 4],na.rm=TRUE), 
-       col = "tomato3", 
-       lty = 3,
-       lwd = 3)
-#site 5
-hist(datW$TAVE[datW$siteN == 5],
-     freq=FALSE, 
-     main = paste(levels(datW$NAME)[5]),
-     xlab = "Average daily temperature (degrees C)", 
-     ylab="Relative frequency",
-     col="orange",
-     border="white")
-#add mean line with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 5],na.rm=TRUE), 
-       col = "tomato3",
-       lwd = 3)
-#add standard deviation line below the mean with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 5],na.rm=TRUE) - sd(datW$TAVE[datW$siteN == 5],na.rm=TRUE), 
-       col = "tomato3", 
-       lty = 3,
-       lwd = 3)
-
-#add standard deviation line above the mean with red (tomato3) color
-#and thickness of 3
-abline(v = mean(datW$TAVE[datW$siteN == 5],na.rm=TRUE) + sd(datW$TAVE[datW$siteN == 5],na.rm=TRUE), 
-       col = "tomato3", 
-       lty = 3,
-       lwd = 3)
-
-
-
 
 
 
@@ -335,70 +248,6 @@ pnorm(5,
 qnorm(0.95,
       mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
       sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
-
-
-
-######question 6
-
-#adding 4 degrees to mean temperature 
-pnorm(qnorm(0.95,
-            mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE),
-            sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE)),
-      mean(datW$TAVE[datW$siteN == 1]+4,na.rm=TRUE),
-      sd(datW$TAVE[datW$siteN == 1],na.rm=TRUE))
-
-#######question 7
-#histogram with precipitation
-h1 <- hist(datW$PRCP[datW$siteN == 1],
-           freq=FALSE, 
-           main = paste(levels(datW$NAME)[1]),
-           xlab = "Average daily precipitation", 
-           xlim=c(0,80),
-           ylab="Relative frequency",
-           col="grey50",
-           border="white")
-
-
-
-###########question 8
-#want to aggregate data 
-#added column of just year into the data so we can aggregate by year, not just date
-year<- substring(datW$DATE,1,4)
-datYEAR<-cbind(datW,year)
-
-agg_data<- aggregate(datYEAR$PRCP, by= list(datYEAR$year,datW$siteN), FUN='mean',na.rm=TRUE)
-#agg_data has three columns
-#group.1 is year, group.2 is site number, and x is average rainfall in the year
-colnames(agg_data)<-c("year","site","avg_rainfall")
-agg_data
-sum(agg_data$avg_rainfall[agg_data$site])
-
-#this histogram is showing the average annual precipitation of only site 1 and the frequency of the average annual precipitaion
-#the data points for site 1 are by year already
-sum_ogram <- hist(agg_data$avg_rainfall[agg_data$site==1],
-           freq=FALSE, 
-           main = "ABERDEEN, WA US",
-           xlab = "Average annual precipitation (mm)", 
-           xlim=c(0,10),
-           ylab="Relative frequency",
-           col="light blue",
-           border="white")
-#xlim was done just by what I saw, how would I do this so it automatically fit the data?
-
-
-
-######question 9
-
-#mean of annual precipitation for all sites individually
-avg_rain_site<-aggregate(agg_data$avg_rainfall,by=list(agg_data$site),FUN="mean")
-colnames(avg_rain_site)<-c("site","avg_rainfall")
-avg_rain_site
-
-#mean of annual precipitation for all years individually
-
-avg_rain_year<-aggregate(agg_data$avg_rainfall,by=list(agg_data$year),FUN="mean")
-colnames(avg_rain_year)<-c("site","avg_rainfall")
-avg_rain_year
 
 
 
