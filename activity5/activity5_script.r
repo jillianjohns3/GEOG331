@@ -50,16 +50,17 @@ datD$hour <- hour(timesD ) + (minute(timesD )/60)
 #get full decimal time
 datD$decDay <- datD$doy + (datD$hour/24)
 #calculate a decimal year, but account for leap year
-datD$decYear <- ifelse(leap_year(datD$year),datD$year + (datD$decDay/366),
-                       datD$year + (datD$decDay/365))
+datD$decYear <- ifelse(leap_year(datD$year),datD$year + ((datD$decDay-1)/366),
+                       datD$year + ((datD$decDay-1)/365))
 #calculate times for datP                       
 datP$hour <- hour(dateP ) + (minute(dateP )/60)
 #get full decimal time
 datP$decDay <- datP$doy + (datP$hour/24)
 #calculate a decimal year, but account for leap year
-datP$decYear <- ifelse(leap_year(datP$year),datP$year + (datP$decDay/366),
-                       datP$year + (datP$decDay/365))          
+datP$decYear <- ifelse(leap_year(datP$year),datP$year + ((datP$decDay-1)/366),
+                       datP$year + ((datP$decDay-1)/365))          
 
+#changed bc divided by 365 and 366 would just be zero!
 
 #QUESTION 2
 
@@ -197,15 +198,62 @@ legend("topright", c("mean","1 standard deviation"), #legend items
 
 #QUESTION 5
 
+datD$month<-month(datesD)
+aveF
 
+#basic formatting
+aveF <- aggregate(datD$discharge, by=list(datD$month), FUN="mean")
+colnames(aveF) <- c("month","monthlyAve")
+sdF <- aggregate(datD$discharge, by=list(datD$month), FUN="sd")
+colnames(sdF) <- c("month","monthlySD")
+
+#start new plot
+dev.new(width=8,height=8)
+
+#bigger margins
+par(mai=c(1,1,1,1))
+#make plot
+plot(aveF$month,aveF$monthlyAve, 
+     type="l", 
+     xlab="Month", 
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
+     lwd=2,
+     ylim=c(-30,60),
+     xaxs="i", yaxs ="i",#remove gaps from axes
+     axes=FALSE)#no axes
+polygon(c(aveF$month, rev(aveF$month)),#x coordinates
+        c(aveF$monthlyAve-sdF$monthlySD,rev(aveF$monthlyAve+sdF$monthlySD)),#ycoord
+        col=rgb(0.392, 0.584, 0.929,.2), #color that is semi-transparent
+        border=NA#no border
+)       
+axis(1, seq(0,12, by=1), #tick intervals
+     lab=seq(0,12, by=1)) #tick labels
+axis(2, seq(-80,80, by=20),
+     seq(-80,80, by=20),
+     las = 2)#show ticks at 90 degree angle
+
+
+#add a line of 2017 discharge
+aveF17 <- aggregate(datD$discharge[datD$year == 2017], by=list(datD$month[datD$year == 2017]), FUN="mean")
+colnames(aveF17) <- c("month","monthlyAve")
+sdF17 <- aggregate(datD$discharge[datD$year == 2017], by=list(datD$month[datD$year == 2017]), FUN="sd")
+colnames(sdF17) <- c("month","monthlySD")
+lines(x=aveF17$month,y=aveF17$monthlyAve,col="blue")
+legend("topright", c("mean","1 standard deviation","2017"), #legend items
+       lwd=c(2,NA,2),#lines
+       col=c("black",rgb(0.392, 0.584, 0.929,.2),"blue"),#colors
+       pch=c(NA,15,NA),#symbols
+       bty="n")#no legend border
 
 
 #QUESTION 6
+#looking at graph made in quesiton 5
 
 
-
-#QUESTION 7
-
+#QUESTION 7 THIS ONE IS NOT DONE!!!!!!
+for(i in datP$doy){
+  
+}
 
 
 #subsest discharge and precipitation within range of interest
@@ -248,6 +296,44 @@ for(i in 1:nrow(hydroP)){
 
 
 #QUESTION 8
+#subsest discharge and precipitation within range of interest
+hydroDwinter <- datD[datD$doy >= 24 & datD$doy < 25 & datD$year == 2013,]
+hydroPwinter <- datP[datP$doy >= 24 & datP$doy < 25 & datP$year == 2013,]
+
+min(hydroDwinter$discharge)
+#get minimum and maximum range of discharge to plot
+#go outside of the range so that it's easy to see high/low values
+#floor rounds down the integer
+yl <- floor(min(hydroDwinter$discharge))-1
+#celing rounds up to the integer
+yh <- ceiling(max(hydroDwinter$discharge))+1
+#minimum and maximum range of precipitation to plot
+pl <- 0
+pm <-  ceiling(max(hydroPwinter$HPCP))+.5
+#scale precipitation to fit on the 
+hydroPwinter$pscale <- (((yh-yl)/(pm-pl)) * hydroPwinter$HPCP) + yl
+par(mai=c(1,1,1,1))
+#make plot of discharge
+plot(hydroDwinter$decDay,
+     hydroDwinter$discharge, 
+     type="l", 
+     ylim=c(yl,yh), 
+     lwd=2,
+     xlab="Day of year", 
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
+#add bars to indicate precipitation 
+for(i in 1:nrow(hydroPwinter)){
+  polygon(c(hydroPwinter$decDay[i]-0.017,hydroPwinter$decDay[i]-0.017,
+            hydroPwinter$decDay[i]+0.017,hydroPwinter$decDay[i]+0.017),
+          c(yl,hydroPwinter$pscale[i],hydroPwinter$pscale[i],yl),
+          col=rgb(0.392, 0.584, 0.929,.2), border=NA)
+}
+
+
+#WHY NO PRECIP BARS???
+
+
+
 
 
 library(ggplot2)
