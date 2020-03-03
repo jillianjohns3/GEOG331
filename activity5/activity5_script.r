@@ -1,3 +1,7 @@
+#Jillian Johns
+#Code from tutorial
+
+
 #install.packages("lubricate")
 
 #load in lubridate
@@ -21,7 +25,6 @@ head(datP)
 #only use most reliable measurements
 #data quality flag,"A" meets publication standard (reliable)
 datD <- datH[datH$discharge.flag == "A",]
-
 
 #### define time for streamflow #####
 #convert time to decimal days and decimal day of year 
@@ -60,7 +63,6 @@ datP$decDay <- datP$doy + (datP$hour/24)
 datP$decYear <- ifelse(leap_year(datP$year),datP$year + ((datP$decDay-1)/366),
                        datP$year + ((datP$decDay-1)/365))          
 
-#changed bc divided by 365 and 366 would just be zero!
 
 #QUESTION 2
 
@@ -72,9 +74,10 @@ plot(datD$decYear, datD$discharge, type="l", xlab="Year", ylab=expression(paste(
 nrow(datD)
 #see how many rows are in datD 
 
-#QUESTION 4
 
 
+
+#code from tutorial
 #basic formatting
 aveF <- aggregate(datD$discharge, by=list(datD$doy), FUN="mean")
 colnames(aveF) <- c("doy","dailyAve")
@@ -90,7 +93,7 @@ par(mai=c(1,1,1,1))
 #make plot
 plot(aveF$doy,aveF$dailyAve, 
      type="l", 
-     xlab="Year", 
+     xlab="day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
      lwd=2)
 
@@ -100,7 +103,7 @@ par(mai=c(1,1,1,1))
 #make plot
 plot(aveF$doy,aveF$dailyAve, 
      type="l", 
-     xlab="Year", 
+     xlab="day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
      lwd=2,
      ylim=c(0,90),
@@ -119,7 +122,7 @@ par(mai=c(1,1,1,1))
 #make plot
 plot(aveF$doy,aveF$dailyAve, 
      type="l", 
-     xlab="Year", 
+     xlab="day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
      lwd=2,
      ylim=c(0,90),
@@ -142,7 +145,7 @@ par(mai=c(1,1,1,1))
 #make plot
 plot(aveF$doy,aveF$dailyAve, 
     type="l", 
-    xlab="Year", 
+    xlab="day of year", 
     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
     lwd=2,
     ylim=c(0,90),
@@ -166,12 +169,22 @@ legend("topright", c("mean","1 standard deviation"), #legend items
 
 
 
+
+
+
+#QUESTION 4 
+#basic formatting
+aveF <- aggregate(datD$discharge, by=list(datD$doy), FUN="mean")
+colnames(aveF) <- c("doy","dailyAve")
+sdF <- aggregate(datD$discharge, by=list(datD$doy), FUN="sd")
+colnames(sdF) <- c("doy","dailySD")
+
 #bigger margins
 par(mai=c(1,1,1,1))
 #make plot
 plot(aveF$doy,aveF$dailyAve, 
     type="l", 
-    xlab="Year", 
+    xlab="day of year", 
     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
     lwd=2,
     ylim=c(0,90),
@@ -195,16 +208,19 @@ legend("topright", c("mean","1 standard deviation"), #legend items
 
 
 
+
+
+
+
+
 #QUESTION 5
 
-datD$month<-month(datesD)
-aveF
 
 #basic formatting
-aveF <- aggregate(datD$discharge, by=list(datD$month), FUN="mean")
-colnames(aveF) <- c("month","monthlyAve")
-sdF <- aggregate(datD$discharge, by=list(datD$month), FUN="sd")
-colnames(sdF) <- c("month","monthlySD")
+aveF <- aggregate(datD$discharge, by=list(datD$decDay), FUN="mean")
+colnames(aveF) <- c("decDay","dailyAve")
+sdF <- aggregate(datD$discharge, by=list(datD$decDay), FUN="sd")
+colnames(sdF) <- c("decDay","dailySD")
 
 #start new plot
 dev.new(width=8,height=8)
@@ -212,32 +228,36 @@ dev.new(width=8,height=8)
 #bigger margins
 par(mai=c(1,1,1,1))
 #make plot 
-plot(aveF$month,aveF$monthlyAve, 
+plot(aveF$decDay,aveF$dailyAve, 
      type="l", 
-     xlab="Month", 
+     xlab="day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
      lwd=2,
-     ylim=c(-30,60),
+     ylim=c(-10,100),
      xaxs="i", yaxs ="i",#remove gaps from axes
      axes=FALSE)#no axes
-polygon(c(aveF$month, rev(aveF$month)),#x coordinates
-        c(aveF$monthlyAve-sdF$monthlySD,rev(aveF$monthlyAve+sdF$monthlySD)),#ycoord
+polygon(c(aveF$decDay, rev(aveF$decDay)),#x coordinates
+        c(aveF$dailyAve-sdF$dailySD,rev(aveF$dailyAve+sdF$dailySD)),#ycoord
         col=rgb(0.392, 0.584, 0.929,.2), #color that is semi-transparent
         border=NA#no border
-)       
-axis(1, seq(0,12, by=1), #tick intervals
-     lab=seq(0,12, by=1)) #tick labels
+)     
+first_days_of_months<- c(1,32,60,91,121,152,182,213,244,274,305,335)
+#found first day of every month in 2017 from a doy calendar online
+
+axis(1, seq(0,360,by=31), #tick intervals about every 31 days
+     labels=(first_days_of_months)) #tick labels
 axis(2, seq(-80,80, by=20),
      seq(-80,80, by=20),
      las = 2)#show ticks at 90 degree angle
 
 
 #add a line of 2017 discharge
-aveF17 <- aggregate(datD$discharge[datD$year == 2017], by=list(datD$month[datD$year == 2017]), FUN="mean")
-colnames(aveF17) <- c("month","monthlyAve")
-sdF17 <- aggregate(datD$discharge[datD$year == 2017], by=list(datD$month[datD$year == 2017]), FUN="sd")
-colnames(sdF17) <- c("month","monthlySD")
-lines(x=aveF17$month,y=aveF17$monthlyAve,col="blue")
+aveF17 <- aggregate(datD$discharge[datD$year == 2017], by=list(datD$doy[datD$year == 2017]), FUN="mean")
+colnames(aveF17) <- c("day of year","dailyAve")
+sdF17 <- aggregate(datD$discharge[datD$year == 2017], by=list(datD$doy[datD$year == 2017]), FUN="sd")
+colnames(sdF17) <- c("day of year","dailySD")
+aveF17
+lines(x=aveF17$"day of year",y=aveF17$dailyAve,col="blue")
 legend("topright", c("mean","1 standard deviation","2017"), #legend items
        lwd=c(2,NA,2),#lines
        col=c("black",rgb(0.392, 0.584, 0.929,.2),"blue"),#colors
@@ -245,19 +265,19 @@ legend("topright", c("mean","1 standard deviation","2017"), #legend items
        bty="n")#no legend border
 
 
+
+
+
+
 #QUESTION 6
 #looking at graph made in question 5
 
 
-#QUESTION 7 
 
 
 
-
-
-
+#I tried to do an if function intead but could not figure it out
 #length(datP$year=="2007"[datP$decDay < 2])
-
 precipfunction <- for(i in datP$decDay){
   numprecip<- c()
   if(length(datP$decDay<i)==24){
@@ -268,19 +288,71 @@ precipfunction <- for(i in datP$decDay){
   return(numprecip)
   i<i+1
 }
-
-datD16$season<- lapply(datD16$doy,datD16function)
-
-
-
-#Use aggregate function???
-aggregate
+#datD16$season<- lapply(datD16$doy,datD16function)
 
 
 
 
 
+#QUESTION 7 
 
+#Use aggregate function
+aggreGATEd <- aggregate(datP,list(datP$doy,datP$year),length)
+all24precip <- aggreGATEd[aggreGATEd$doy==24,]
+aggreGATEd
+
+#start new plot
+dev.new(width=8,height=8)
+
+#bigger margins
+par(mai=c(1,1,1,1))
+#make plot 
+plot(datD$decYear,datD$discharge, 
+     type="l", 
+     xlab="Year", 
+     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
+     lwd=2,
+     ylim=c(0,400),
+     col="light blue",
+     xaxs="i", yaxs ="i",#remove gaps from axes
+     axes=FALSE)#no axes
+names(all24precip)[1] <- "doy_good"
+names(all24precip)[2] <- "year_good"
+
+all24precip$decYear <- ifelse(leap_year(all24precip$year_good),all24precip$year_good + ((all24precip$doy_good-1)/366),
+                       all24precip$year_good + ((all24precip$doy_good-1)/365))
+
+
+points(x=all24precip$decYear,
+       y=rep(325,length(all24precip$decYear)),
+       type="p",
+       pch=8,
+       col="blue"
+    )
+
+axis(1, seq(2007,2020, by=1), #tick intervals
+     lab=seq(2007,2020, by=1)) #tick labels
+axis(2, seq(0,400, by=50),
+     seq(0,400, by=50),
+     las = 2)#show ticks at 90 degree angle
+
+legend("topright", c("discharge","days w/ 24 precip measurements"), #legend items
+       lwd=c(2,NA),#lines
+       col=c("light blue","blue"),#colors
+       pch=c(NA,8),#symbols
+       bty="o")#yes legend border (black line)
+
+
+
+
+
+
+
+
+
+
+
+#from tutorial
 
 #subsest discharge and precipitation within range of interest
 hydroD <- datD[datD$doy >= 248 & datD$doy < 250 & datD$year == 2011,]
@@ -364,6 +436,9 @@ for(i in 1:nrow(hydroPwinter)){
 
 
 
+
+
+#from tutorial
 library(ggplot2)
 #specify year as a factor
 datD$yearPlot <- as.factor(datD$year)
@@ -371,11 +446,10 @@ datD$yearPlot <- as.factor(datD$year)
 ggplot(data= datD, aes(yearPlot,discharge)) + 
   geom_boxplot()
 
-
-
 #make a violin plot
 ggplot(data= datD, aes(yearPlot,discharge)) + 
     geom_violin()
+
 
 
 
