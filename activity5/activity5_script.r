@@ -70,11 +70,10 @@ plot(datD$decYear, datD$discharge, type="l", xlab="Year", ylab=expression(paste(
 
 #QUESTION 3
 nrow(datD)
-
+#see how many rows are in datD 
 
 #QUESTION 4
 
-datD
 
 #basic formatting
 aveF <- aggregate(datD$discharge, by=list(datD$doy), FUN="mean")
@@ -212,7 +211,7 @@ dev.new(width=8,height=8)
 
 #bigger margins
 par(mai=c(1,1,1,1))
-#make plot
+#make plot 
 plot(aveF$month,aveF$monthlyAve, 
      type="l", 
      xlab="Month", 
@@ -247,13 +246,40 @@ legend("topright", c("mean","1 standard deviation","2017"), #legend items
 
 
 #QUESTION 6
-#looking at graph made in quesiton 5
+#looking at graph made in question 5
 
 
-#QUESTION 7 THIS ONE IS NOT DONE!!!!!!
-for(i in datP$doy){
-  
+#QUESTION 7 
+
+
+
+
+
+
+#length(datP$year=="2007"[datP$decDay < 2])
+
+precipfunction <- for(i in datP$decDay){
+  numprecip<- c()
+  if(length(datP$decDay<i)==24){
+    numprecip<-c(numprecip,24)
+  } else{
+    numprecip<-c(numprecip,length(datP$decDay<i))
+  }
+  return(numprecip)
+  i<i+1
 }
+
+datD16$season<- lapply(datD16$doy,datD16function)
+
+
+
+#Use aggregate function???
+aggregate
+
+
+
+
+
 
 
 #subsest discharge and precipitation within range of interest
@@ -295,29 +321,34 @@ for(i in 1:nrow(hydroP)){
 }
 
 
+
+
+
+
+
 #QUESTION 8
 #subsest discharge and precipitation within range of interest
-hydroDwinter <- datD[datD$doy >= 24 & datD$doy < 25 & datD$year == 2013,]
-hydroPwinter <- datP[datP$doy >= 24 & datP$doy < 25 & datP$year == 2013,]
+hydroDwinter <- datD[datD$doy >= 22 & datD$doy < 23 & datD$year == 2013,]
+hydroPwinter <- datP[datP$doy >= 22 & datP$doy < 23 & datP$year == 2013,]
 
 min(hydroDwinter$discharge)
 #get minimum and maximum range of discharge to plot
 #go outside of the range so that it's easy to see high/low values
 #floor rounds down the integer
-yl <- floor(min(hydroDwinter$discharge))-1
+ylwinter <- floor(min(hydroDwinter$discharge))-1
 #celing rounds up to the integer
-yh <- ceiling(max(hydroDwinter$discharge))+1
+yhwinter <- ceiling(max(hydroDwinter$discharge))+1
 #minimum and maximum range of precipitation to plot
-pl <- 0
-pm <-  ceiling(max(hydroPwinter$HPCP))+.5
+plwinter <- 0
+pmwinter <-  ceiling(max(hydroPwinter$HPCP))+.5
 #scale precipitation to fit on the 
-hydroPwinter$pscale <- (((yh-yl)/(pm-pl)) * hydroPwinter$HPCP) + yl
+hydroPwinter$pscale <- (((yhwinter-ylwinter)/(pmwinter-plwinter)) * hydroPwinter$HPCP) + ylwinter
 par(mai=c(1,1,1,1))
 #make plot of discharge
 plot(hydroDwinter$decDay,
      hydroDwinter$discharge, 
      type="l", 
-     ylim=c(yl,yh), 
+     ylim=c(ylwinter,yhwinter), 
      lwd=2,
      xlab="Day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
@@ -325,12 +356,9 @@ plot(hydroDwinter$decDay,
 for(i in 1:nrow(hydroPwinter)){
   polygon(c(hydroPwinter$decDay[i]-0.017,hydroPwinter$decDay[i]-0.017,
             hydroPwinter$decDay[i]+0.017,hydroPwinter$decDay[i]+0.017),
-          c(yl,hydroPwinter$pscale[i],hydroPwinter$pscale[i],yl),
+          c(ylwinter,hydroPwinter$pscale[i],hydroPwinter$pscale[i],ylwinter),
           col=rgb(0.392, 0.584, 0.929,.2), border=NA)
 }
-
-
-#WHY NO PRECIP BARS???
 
 
 
@@ -350,4 +378,87 @@ ggplot(data= datD, aes(yearPlot,discharge)) +
     geom_violin()
 
 
+
+
+
 #QUESTION 9
+library(ggplot2)
+#have to make seasons a column of season as factors
+datD16<-datD[datD$year=="2016",]
+
+
+#2016 seasons
+#winter: doy<80 >=355
+#spring: >=80 <172
+#summer: >=172 <286
+#fall: >=286 <355
+
+
+datD16function <- function(doy){
+  if(doy < 80 | doy >= 355){
+    seasonname<- "Winter"
+  } else if(doy >= 80 & doy < 172){
+    seasonname<- "Spring"
+  } else if(doy >= 172 & doy < 286){
+    seasonname<- "Summer"
+  } else{
+    seasonname<- "Fall"
+  }
+  return(seasonname)
+}
+
+
+datD16$season<- lapply(datD16$doy,datD16function)
+datD16$season<-unlist(datD16$season)
+datD16$season<-as.factor(datD16$season)
+is.factor(datD16$season)
+
+
+#make a violin plot
+ggplot(datD16, aes(season,discharge)) + 
+  geom_violin()+ ggtitle("2016 Discharge by Season")
+
+
+
+
+
+
+#2017
+library(ggplot2)
+#have to make seasons a column of season as factors
+datD17<-datD[datD$year=="2017",]
+
+
+#2017 seasons
+#winter: doy<79 >=356
+#spring: >=79 <171
+#summer: >=171 <285
+#fall: >=285 <356
+
+
+datD17function <- function(doy){
+  if(doy < 79 | doy >= 356){
+    seasonname<- "Winter"
+  } else if(doy >= 79 & doy < 171){
+    seasonname<- "Spring"
+  } else if(doy >= 171 & doy < 285){
+    seasonname<- "Summer"
+  } else{
+    seasonname<- "Fall"
+  }
+  return(seasonname)
+}
+
+
+datD17$season<- lapply(datD17$doy,datD17function)
+datD17$season<-unlist(datD17$season)
+datD17$season<-as.factor(datD17$season)
+is.factor(datD17$season)
+
+
+#make a violin plot
+ggplot(datD17, aes(season,discharge)) + 
+  geom_violin() + ggtitle("2017 Discharge by Season")
+
+
+
