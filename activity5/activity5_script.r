@@ -308,7 +308,8 @@ dev.new(width=8,height=8)
 par(mai=c(1,1,1,1))
 #make plot 
 plot(datD$decYear,datD$discharge, 
-     type="l", 
+     type="l",
+     main="Discharge Measurements",
      xlab="Year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")),
      lwd=2,
@@ -382,6 +383,7 @@ plot(hydroD$decDay,
     type="l", 
     ylim=c(yl,yh), 
     lwd=2,
+    main="Discharge Measurements",
     xlab="Day of year", 
     ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
 #add bars to indicate precipitation 
@@ -400,8 +402,8 @@ for(i in 1:nrow(hydroP)){
 
 #QUESTION 8
 #subsest discharge and precipitation within range of interest
-hydroDwinter <- datD[datD$doy >= 22 & datD$doy < 23 & datD$year == 2013,]
-hydroPwinter <- datP[datP$doy >= 22 & datP$doy < 23 & datP$year == 2013,]
+hydroDwinter <- datD[datD$doy >= 296 & datD$doy < 297 & datD$year == 2007,]
+hydroPwinter <- datP[datP$doy >= 296 & datP$doy < 297 & datP$year == 2007,]
 
 min(hydroDwinter$discharge)
 #get minimum and maximum range of discharge to plot
@@ -422,6 +424,7 @@ plot(hydroDwinter$decDay,
      type="l", 
      ylim=c(ylwinter,yhwinter), 
      lwd=2,
+     main="Discharge and Precipitation",
      xlab="Day of year", 
      ylab=expression(paste("Discharge ft"^"3 ","sec"^"-1")))
 #add bars to indicate precipitation 
@@ -533,6 +536,5 @@ is.factor(datD17$season)
 #make a violin plot
 ggplot(datD17, aes(season,discharge)) + 
   geom_violin() + ggtitle("2017 Discharge by Season")
-
 
 
